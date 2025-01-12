@@ -1,10 +1,28 @@
-'use strict';
+let listItems = document.querySelectorAll(".reveal");
 
-window.addEventListener('scroll', event => {
-    const message = document.querySelector('div.reveal')
-    const massageTopX = message.getBoundingClientRect().top;
-    const massageBottomX = message.getBoundingClientRect().bottom;
-    const viewportHeight = window.innerHeight;
-    const condition = (massageTopX < (viewportHeight / 1.5) & massageBottomX >= (viewportHeight / 4))
-    condition ? message.classList.add('reveal_active') : message.classList.remove('reveal_active');
-})
+const isInViewport = function (element) {
+	const viewportHeight = window.innerHeight;
+	const elementTop = element.getBoundingClientRect().top;
+	const elementHeight = element.getBoundingClientRect().height;
+	return elementTop < viewportHeight && elementTop > -elementHeight ?
+		true :
+		false;
+};
+
+function checkReveals() {
+  [...listItems].forEach(element => {
+		if (isInViewport(element)) {
+			if (!element.classList.contains("reveal_active")) {
+				element.classList.add("reveal_active");
+			}
+		} else {
+			if (element.classList.contains("reveal_active")) {
+				element.classList.remove("reveal_active");
+			}
+		}
+	});
+}
+
+window.addEventListener("scroll", checkReveals, false);
+
+checkReveals();
